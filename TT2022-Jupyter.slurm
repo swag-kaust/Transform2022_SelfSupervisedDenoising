@@ -14,7 +14,7 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 ## Move to directory:
-cd /ibex/scratch/birniece/TransformSSDTutoril
+cd /ibex/scratch/birniece/Transform2022_SelfSupervisedDenoising
 
 ## Setup environment
 source activate tt2022ssd
