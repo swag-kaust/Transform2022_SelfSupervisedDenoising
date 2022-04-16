@@ -11,14 +11,12 @@ dependencies:
   - cudatoolkit=10.2
   - pylops
   - segyio
-  - scikit-learn cd ec
+  - scikit-learn
   - pandas
   - matplotlib
   - ipython
   - jupyter
   - pytorch
-  - torchvision
-  - torchaudio
   - tqdm
   - pip:
     - image
