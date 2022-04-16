@@ -1,0 +1,42 @@
+# OS generated files #
+.*.swp
+*.py[cod]
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.idea/*
+static/*
+db.sqlite3
+
+# Build #
+build
+dist
+.egg*
+
+# Jupyter files
+*checkpoint.ipynb
+
+# Data - excluding NPY that we included
+#*.npy
+*.npz
+*.net
+*.pkl
+
+# Figures
+*.eps
+*.png
+*.jpg
+*.jpeg
+
+# Slurm
+slurm*
+*.out
+
+# PyTorch Models #
+*.pt
+
+.cache
