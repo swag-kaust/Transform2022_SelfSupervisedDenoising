@@ -20,8 +20,8 @@ dist
 # Jupyter files
 *checkpoint.ipynb
 
-# Data - excluding NPY that we included
-#*.npy
+# Data
+*.npy
 *.npz
 *.net
 *.pkl
@@ -35,6 +35,7 @@ dist
 # Slurm
 slurm*
 *.out
+dcgm/* 
 
 # PyTorch Models #
 *.pt
