@@ -9,7 +9,7 @@ class ContractingBlock(nn.Module):
     We allow also to optionally include a batch normalization and dropout step.
     """
 
-    def __init__(self, input_channels, use_dropout=False, use_bn=True):
+    def __init__(self, input_channels, use_dropout=False, use_bn=False):
         super(ContractingBlock, self).__init__()
         self.conv1 = nn.Conv2d(input_channels, input_channels * 2, kernel_size=11, padding=5)
         self.conv2 = nn.Conv2d(input_channels * 2, input_channels * 2, kernel_size=11, padding=5)
@@ -46,7 +46,7 @@ class ExpandingBlock(nn.Module):
     We allow also to optionally include a batch normalization and dropout step.
     """
 
-    def __init__(self, input_channels, use_dropout=False, use_bn=True):
+    def __init__(self, input_channels, use_dropout=False, use_bn=False):
         super(ExpandingBlock, self).__init__()
         self.upsample = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
         self.conv1 = nn.Conv2d(input_channels, input_channels // 2, kernel_size=11, padding=5)
@@ -100,7 +100,7 @@ def act(act_fun='LeakyReLU'):
         return act_fun()
 
 
-def Conv2d_Block(in_f, out_f, kernel_size, stride=1, bias=True, bnorm=True,
+def Conv2d_Block(in_f, out_f, kernel_size, stride=1, bias=True, bnorm=False,
                  act_fun='LeakyReLU', dropout=None):
     """2d Convolutional Block (conv, dropout, batchnorm, activation)
     """

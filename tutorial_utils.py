@@ -26,6 +26,7 @@ def regular_patching_2D(data, patchsize=[64, 64], step=[16, 16], verbose=True):
 
     return patches
 
+
 def add_whitegaussian_noise(d, sc=0.5):
     n = np.random.normal(size=d.shape)
 
