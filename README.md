@@ -11,7 +11,6 @@ The tutorial was originally presented as a live-stream event on YouTube on April
 
 YouTube Link: XXXX
 
-
 Tutorial overview
 ---------------------------
 
@@ -22,6 +21,14 @@ In this tutorial, we will explain the theory behind blind-spot networks and how 
 requirement of clean-noisy training data pairs. We will deep dive into how the original methodologies for random noise can be adapted to handle 
 realistic noise in seismic data, both pseudo-random noise and structured noise. Furthermore, each sub-topic presented will be followed by a live, 
 code-along session such that all participants will be able to recreate the work shown and can afterwards apply it to their own use cases. 
+
+If you found the tutorial useful please consider citing our work in your studies:
+
+> Birnie, C., M. Ravasi, S. Liu, and T. Alkhalifah, 2021, The potential of self-supervised networks for random noise 
+> suppression in seismic data: Artificial Intelligence in Geosciences.
+
+> Liu, S., C. Birnie, and T. Alkhalifah, 2022, Coherent noise suppression via a self-supervised deep learning scheme: 
+> 83rd EAGE Conference and Exhibition 2022, European Association of Geoscientists & Engineers, 1–5
 
 Repository overview
 ---------------------------
@@ -43,9 +50,16 @@ Installation instructions
 
 The data utilised in this tutorial series can be downloaded from: XXXX
 
+using the password: 
+
+This folder contains synthetically generated shot gathers modelled using the Hess VTI model and a post-stack seismic section
+of the Hess VTI model. The folder also contains a field data example originally downloaded from Madagascar of a post-stack
+seismic section that is often used benchmarking new random noise suppression algorithms.
+
 **Running in CoLab**
 
-All the tutorials can be run in Google CoLab, for those who do not have access to a local GPU. The CoLab notebooks can be opened using the following links:
+All the tutorials can be run in Google CoLab, for those who do not have access to a local GPU. The CoLab notebooks can be 
+opened using the following links:
 
  - Tutorial One: Random Noise Suppression
     - skeletal: XXX
@@ -56,6 +70,9 @@ All the tutorials can be run in Google CoLab, for those who do not have access t
  - Tutorial Three: Structured Noise Suppression
     - skeletal: XXX
     - full: XXX
+
+To run these you will need to download the data and necessary `*.py` files from this repository and point to them from the 
+notebooks.
 
 **Environment creation**
 
