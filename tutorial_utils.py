@@ -8,7 +8,10 @@ import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader 
 
 
-def regular_patching_2D(data, patchsize=[64, 64], step=[16, 16], verbose=True):
+def regular_patching_2D(data, 
+                        patchsize=[64, 64], 
+                        step=[16, 16], 
+                        verbose=True):
     """ Regular sample and extract patches from a 2D array
     :param data: np.array [y,x]
     :param patchsize: tuple [y,x]
@@ -34,12 +37,49 @@ def regular_patching_2D(data, patchsize=[64, 64], step=[16, 16], verbose=True):
 
 
 def add_whitegaussian_noise(d, sc=0.5):
+    """ Add white gaussian noise to data patch
+    
+    Parameters
+    ----------
+    d: np.array [y,x]
+        Data to add noise to
+    sc: float 
+        noise scaling value
+        
+    Returns
+    -------
+        d+n: np.array 
+            Created noisy data
+        n: np.array 
+            Additive noise        
+    """
+    
     n = np.random.normal(size=d.shape)
 
     return d + (n * sc), n
 
 
 def add_bandlimited_noise(d, lc=2, hc=80, sc=0.5):
+    """ Add bandlimited noise to data patch
+    
+    Parameters
+    ----------
+    d: np.array [y,x]
+        Data to add noise to
+    lc: float 
+        Low cut for bandpass
+    hc: float 
+        High cut for bandpass
+    sc: float 
+        Noise scaling value
+        
+    Returns
+    -------
+        d+n: np.array 
+            Created noisy data
+        n: np.array 
+            Additive noise        
+    """
     n = band_limited_noise(size=d.shape, lowcut=lc, highcut=hc)
 
     return d + (n * sc), n
@@ -50,6 +90,24 @@ def add_trace_wise_noise(d,
                          noisy_trace_value,
                          num_realisations,
                         ):  
+    """ Add trace-wise noise to data patch
+    
+    Parameters
+    ----------
+    d: np.array [shot,y,x]
+        Data to add noise to
+    num_noisy_traces: int 
+        Number of noisy traces to add to shots
+    noisy_trace_value: int 
+        Value of noisy traces
+    num_realisations: int 
+        Number of repeated applications per shot
+        
+    Returns
+    -------
+        alldata: np.array 
+            Created noisy data
+    """
     
     alldata=[]
     for k in range(len(d)):        
@@ -69,6 +127,26 @@ def add_trace_wise_noise(d,
 
 
 def butter_bandpass(lowcut, highcut, fs, order=5):
+    """ Bandpass filter
+    
+    Parameters
+    ----------
+    lowcut: int
+        Low cut for bandpass
+    highcut: int 
+        High cut for bandpass
+    fs: int 
+        Sampling frequency
+    order: int 
+        Filter order
+        
+    Returns
+    -------
+        b : np.array 
+            The numerator coefficient vector of the filter
+        a : np.array 
+            The denominator coefficient vector of the filter
+    """
     nyq = 0.5 * fs
     low = lowcut / nyq
     high = highcut / nyq
@@ -77,12 +155,53 @@ def butter_bandpass(lowcut, highcut, fs, order=5):
 
 
 def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
+    """ Apply bandpass filter to trace
+    
+    Parameters
+    ----------
+    data: np.array [1D]
+        Data onto which to apply bp filter
+    lowcut: int
+        Low cut for bandpass
+    highcut: int 
+        High cut for bandpass
+    fs: int 
+        Sampling frequency
+    order: int 
+        Filter order
+        
+    Returns
+    -------
+        y : np.array 
+            Bandpassed data
+    """
+    
     b, a = butter_bandpass(lowcut, highcut, fs, order=order)
     y = filtfilt(b, a, data)
     return y
 
 
 def array_bp(data, lowcut, highcut, fs, order=5):
+    """ Apply bandpass filter to array of traces
+    
+    Parameters
+    ----------
+    data: np.array [2D]
+        Data onto which to apply bp filter
+    lowcut: int
+        Low cut for bandpass
+    highcut: int 
+        High cut for bandpass
+    fs: int 
+        Sampling frequency
+    order: int 
+        Filter order
+        
+    Returns
+    -------
+        bp : np.array [2D]
+            Bandpassed data
+    """
     bp = np.vstack([butter_bandpass_filter(data[:, ix], lowcut, highcut, fs, order)
                     for ix in range(data.shape[1])])
 
@@ -90,6 +209,24 @@ def array_bp(data, lowcut, highcut, fs, order=5):
 
 
 def band_limited_noise(size, lowcut, highcut, fs=250):
+    """ Generate bandlimited noise
+    
+    Parameters
+    ----------
+    size: tuple 
+        Size of array on which to create the noise
+    lowcut: int
+        Low cut for bandpass
+    highcut: int 
+        High cut for bandpass
+    fs: int 
+        Sampling frequency
+        
+    Returns
+    -------
+        bpnoise : np.array 
+            Bandpassed noise
+    """
 
     basenoise = np.random.normal(size=size)
     # Pad top and bottom due to filter effects
@@ -102,6 +239,11 @@ def band_limited_noise(size, lowcut, highcut, fs=250):
 def set_seed(seed):
     """
     Use this to set ALL the random seeds to a fixed value and take out any randomness from cuda kernels
+    
+    Parameters
+    ----------
+    seed: int 
+        Integer to be used for the seed
     """
     random.seed(seed)
     np.random.seed(seed)
@@ -114,6 +256,13 @@ def set_seed(seed):
 
 
 def weights_init(m):
+    """Initialise weights of NN
+    
+    Parameters
+    ----------
+    m: torch.model 
+        NN
+    """
     if isinstance(m, nn.Conv2d):
         nn.init.xavier_normal(m.weight)
         nn.init.constant(m.bias, 0)
@@ -127,6 +276,32 @@ def make_data_loader(noisy_patches,
                      batch_size,
                      torch_generator
                     ):
+    """Make data loader to be used for the training and validation of a blind-spot NN
+    
+    Parameters
+    ----------
+    noisy_patches: np.array
+        Patches of noisy data to be network target
+    corrupted_patches: np.array
+        Patches of processed noisy data to be network input
+    masks: np.array
+        Masks corresponding to corrupted_patches, indicating location of active pixels
+    n_training: int
+        Number of samples to be used for training
+    n_test: int
+        Number of samples to be used for validation
+    batch_size: int
+        Size of data batches to be used during training
+    torch_generator: torch.generator
+        For reproducibility of data loader
+        
+    Returns
+    -------
+        train_loader : torch.DataLoader
+            Training data separated by batch
+        test_loader : torch.DataLoader
+            Validation data separated by batch
+    """
     
     # Define Train Set
     # Remember to add 1 to 2nd dim - Pytorch is [#data, #channels, height, width]
@@ -158,6 +333,30 @@ def plot_corruption(noisy,
                     seismic_cmap='RdBu', 
                     vmin=-0.25, 
                     vmax=0.25):
+    """Plotting function of N2V pre-processing step
+    
+    Parameters
+    ----------
+    noisy: np.array
+        Noisy data patch
+    crpt: np.array
+        Pre-processed data patch
+    mask: np.array
+        Mask corresponding to pre-processed data patch
+    seismic_cmap: str
+        Colormap for seismic plots
+    vmin: float
+        Minimum value on colour scale
+    vmax: float
+        Maximum value on colour scale
+        
+    Returns
+    -------
+        fig : pyplot.figure
+            Figure object
+        axs : pyplot.axs
+            Axes of figure
+    """
     
     fig,axs = plt.subplots(1,3,figsize=[15,5])
     axs[0].imshow(noisy, cmap=seismic_cmap, vmin=vmin, vmax=vmax)
@@ -176,6 +375,26 @@ def plot_training_metrics(train_accuracy_history,
                           train_loss_history,
                           test_loss_history
                          ):
+    """Plotting function of N2V training metrics
+    
+    Parameters
+    ----------
+    train_accuracy_history: np.array
+        Accuracy per epoch throughout training
+    test_accuracy_history: np.array
+        Accuracy per epoch throughout validation
+    train_loss_history: np.array
+        Loss per epoch throughout training
+    test_accuracy_history: np.array
+        Loss per epoch throughout validation
+        
+    Returns
+    -------
+        fig : pyplot.figure
+            Figure object
+        axs : pyplot.axs
+            Axes of figure
+    """
     fig,axs = plt.subplots(1,2,figsize=(15,4))
     
     axs[0].plot(train_accuracy_history, 'r', lw=2, label='train')
@@ -201,6 +420,30 @@ def plot_synth_results(clean,
                        cmap='RdBu', 
                        vmin=-0.25, 
                        vmax=0.25):
+    """Plotting function of N2V pre-processing step
+    
+    Parameters
+    ----------
+    clean: np.array
+        Clean data patch
+    noisy: np.array
+        Noisy data patch
+    denoised: np.array
+        Denoised data patch
+    cmap: str
+        Colormap for plots
+    vmin: float
+        Minimum value on colour scale
+    vmax: float
+        Maximum value on colour scale
+        
+    Returns
+    -------
+        fig : pyplot.figure
+            Figure object
+        axs : pyplot.axs
+            Axes of figure
+    """
     
     fig,axs = plt.subplots(1,4,figsize=[15,4])
     axs[0].imshow(clean, aspect='auto', cmap=cmap, vmin=vmin, vmax=vmax)
