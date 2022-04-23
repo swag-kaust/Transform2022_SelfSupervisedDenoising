@@ -420,7 +420,7 @@ def plot_synth_results(clean,
                        cmap='RdBu', 
                        vmin=-0.25, 
                        vmax=0.25):
-    """Plotting function of N2V pre-processing step
+    """Plotting function of synthetic results from denoising
     
     Parameters
     ----------
@@ -455,6 +455,44 @@ def plot_synth_results(clean,
     axs[1].set_title('Noisy')
     axs[2].set_title('Denoised')
     axs[3].set_title('Noise Removed')
+
+    fig.tight_layout()
+    return fig,axs
+
+def plot_field_results(noisy, 
+                       denoised,
+                       cmap='RdBu', 
+                       vmin=-0.25, 
+                       vmax=0.25):
+    """Plotting function of field results from denoising, i.e., where no clean is available
+    
+    Parameters
+    ----------
+    noisy: np.array
+        Noisy data patch
+    denoised: np.array
+        Denoised data patch
+    cmap: str
+        Colormap for plots
+    vmin: float
+        Minimum value on colour scale
+    vmax: float
+        Maximum value on colour scale
+        
+    Returns
+    -------
+        fig : pyplot.figure
+            Figure object
+        axs : pyplot.axs
+            Axes of figure
+    """
+    
+    fig,axs = plt.subplots(1,2,figsize=[15,8])
+    axs[0].imshow(noisy, aspect='auto', cmap=cmap, vmin=vmin, vmax=vmax)
+    axs[1].imshow(denoised, aspect='auto', cmap=cmap, vmin=vmin, vmax=vmax)
+
+    axs[0].set_title('Noisy')
+    axs[1].set_title('Denoised')
 
     fig.tight_layout()
     return fig,axs
