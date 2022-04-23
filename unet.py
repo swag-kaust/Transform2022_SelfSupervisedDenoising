@@ -11,8 +11,8 @@ class ContractingBlock(nn.Module):
 
     def __init__(self, input_channels, use_dropout=False, use_bn=False):
         super(ContractingBlock, self).__init__()
-        self.conv1 = nn.Conv2d(input_channels, input_channels * 2, kernel_size=11, padding=5)
-        self.conv2 = nn.Conv2d(input_channels * 2, input_channels * 2, kernel_size=11, padding=5)
+        self.conv1 = nn.Conv2d(input_channels, input_channels * 2, kernel_size=3, padding=1)#, kernel_size=11, padding=5)
+        self.conv2 = nn.Conv2d(input_channels * 2, input_channels * 2, kernel_size=3, padding=1)
         self.activation = nn.LeakyReLU(0.2)
         self.maxpool = nn.MaxPool2d(kernel_size=2, stride=2)
         if use_bn:
@@ -49,9 +49,9 @@ class ExpandingBlock(nn.Module):
     def __init__(self, input_channels, use_dropout=False, use_bn=False):
         super(ExpandingBlock, self).__init__()
         self.upsample = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
-        self.conv1 = nn.Conv2d(input_channels, input_channels // 2, kernel_size=11, padding=5)
-        self.conv2 = nn.Conv2d(input_channels, input_channels // 2, kernel_size=11, padding=5)
-        self.conv3 = nn.Conv2d(input_channels // 2, input_channels // 2, kernel_size=11, padding=5)
+        self.conv1 = nn.Conv2d(input_channels, input_channels // 2, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv2d(input_channels, input_channels // 2, kernel_size=3, padding=1)
+        self.conv3 = nn.Conv2d(input_channels // 2, input_channels // 2, kernel_size=3, padding=1)
         if use_bn:
             self.batchnorm = nn.BatchNorm2d(input_channels // 2, momentum=0.8)
         self.use_bn = use_bn

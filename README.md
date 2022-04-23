@@ -48,9 +48,9 @@ Installation instructions
 
 **Data Download**
 
-The data utilised in this tutorial series can be downloaded from: XXXX
+The data utilised in this tutorial series can be downloaded from: https://exrcsdrive.kaust.edu.sa/exrcsdrive/index.php/s/vjjry6BZ3n3Ewei
 
-using the password: 
+using the password: kaust
 
 This folder contains synthetically generated shot gathers modelled using the Hess VTI model and a post-stack seismic section
 of the Hess VTI model. The folder also contains a field data example originally downloaded from Madagascar of a post-stack

@@ -1,6 +1,7 @@
 import numpy as np
 import random
 import itertools
+from scipy.signal import filtfilt, butter
 import torch
 import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader 
@@ -36,6 +37,66 @@ def add_whitegaussian_noise(d, sc=0.5):
 
     return d + (n * sc), n
 
+
+def add_bandlimited_noise(d, lc=2, hc=80, sc=0.5):
+    n = band_limited_noise(size=d.shape, lowcut=lc, highcut=hc)
+
+    return d + (n * sc), n
+
+
+def add_trace_wise_noise(d,
+                         num_noisy_traces,
+                         noisy_trace_value,
+                         num_realisations,
+                        ):  
+    
+    alldata=[]
+    for k in range(len(d)):        
+        clean=d[k]    
+        data=np.ones([num_realisations,d.shape[1],d.shape[2]])
+        for i in range(len(data)):    
+            corr = np.random.randint(0,d.shape[2], num_noisy_traces) 
+            data[i] = clean.copy()
+            data[i,:,corr] = np.ones([1,d.shape[1]])*noisy_trace_value
+        alldata.append(data)
+        
+    alldata=np.array(alldata) 
+    alldata=alldata.reshape(num_realisations*d.shape[0],d.shape[1],d.shape[2])
+    print(alldata.shape)
+
+    return alldata
+
+
+def butter_bandpass(lowcut, highcut, fs, order=5):
+    nyq = 0.5 * fs
+    low = lowcut / nyq
+    high = highcut / nyq
+    b, a = butter(order, [low, high], btype='band')
+    return b, a
+
+
+def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
+    b, a = butter_bandpass(lowcut, highcut, fs, order=order)
+    y = filtfilt(b, a, data)
+    return y
+
+
+def array_bp(data, lowcut, highcut, fs, order=5):
+    bp = np.vstack([butter_bandpass_filter(data[:, ix], lowcut, highcut, fs, order)
+                    for ix in range(data.shape[1])])
+
+    return bp
+
+
+def band_limited_noise(size, lowcut, highcut, fs=250):
+
+    basenoise = np.random.normal(size=size)
+    # Pad top and bottom due to filter effects
+    basenoise_pad = np.vstack([np.zeros([50, size[1]]), basenoise, np.zeros([50, size[1]])])
+    # Bandpass base noise
+    bpnoise =  array_bp(basenoise_pad, lowcut, highcut, fs, order=5)[:,50:-50]
+
+    return bpnoise.T
 
 def set_seed(seed):
     """
