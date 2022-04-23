@@ -2,6 +2,7 @@ import numpy as np
 import random
 import itertools
 from scipy.signal import filtfilt, butter
+import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader 
@@ -149,3 +150,68 @@ def make_data_loader(noisy_patches,
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
     
     return train_loader, test_loader
+
+
+def plot_corruption(noisy, 
+                    crpt, 
+                    mask, 
+                    seismic_cmap='RdBu', 
+                    vmin=-0.25, 
+                    vmax=0.25):
+    
+    fig,axs = plt.subplots(1,3,figsize=[15,5])
+    axs[0].imshow(noisy, cmap=seismic_cmap, vmin=vmin, vmax=vmax)
+    axs[1].imshow(crpt, cmap=seismic_cmap, vmin=vmin, vmax=vmax)
+    axs[2].imshow(mask, cmap='binary_r')
+
+    axs[0].set_title('Original')
+    axs[1].set_title('Corrupted')
+    axs[2].set_title('Corruption Mask')
+    
+    fig.tight_layout()
+    return fig,axs
+
+def plot_training_metrics(train_accuracy_history,
+                         test_accuracy_history,
+                          train_loss_history,
+                          test_loss_history
+                         ):
+    fig,axs = plt.subplots(1,2,figsize=(15,4))
+    
+    axs[0].plot(train_accuracy_history, 'r', lw=2, label='train')
+    axs[0].plot(test_accuracy_history, 'k', lw=2, label='validation')
+    axs[0].set_title('RMSE', size=16)
+    axs[0].set_ylabel('RMSE', size=12)
+
+    axs[1].plot(train_loss_history, 'r', lw=2, label='train')
+    axs[1].plot(test_loss_history, 'k', lw=2, label='validation')
+    axs[1].set_title('Loss', size=16)
+    axs[1].set_ylabel('Loss', size=12)
+    
+    for ax in axs:
+        ax.legend()
+        ax.set_xlabel('# Epochs', size=12)
+    fig.tight_layout()
+    return fig,axs
+
+
+def plot_synth_results(clean, 
+                       noisy, 
+                       denoised,
+                       cmap='RdBu', 
+                       vmin=-0.25, 
+                       vmax=0.25):
+    
+    fig,axs = plt.subplots(1,4,figsize=[15,4])
+    axs[0].imshow(clean, aspect='auto', cmap=cmap, vmin=vmin, vmax=vmax)
+    axs[1].imshow(noisy, aspect='auto', cmap=cmap, vmin=vmin, vmax=vmax)
+    axs[2].imshow(denoised, aspect='auto', cmap=cmap, vmin=vmin, vmax=vmax)
+    axs[3].imshow(noisy-denoised, aspect='auto', cmap=cmap, vmin=vmin, vmax=vmax)
+
+    axs[0].set_title('Clean')
+    axs[1].set_title('Noisy')
+    axs[2].set_title('Denoised')
+    axs[3].set_title('Noise Removed')
+
+    fig.tight_layout()
+    return fig,axs
