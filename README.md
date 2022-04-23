@@ -37,7 +37,7 @@ The top level of the repository contains the skeleton tutorial notebooks that wi
 This level also contains the necessary files for setting up the conda environment (and submitting jobs for those working on the 
 KAUST IBEX cluster). As well as the standard git files - README, .gitignore, etc. 
 
-The **Tutorial_Solutions** folder contains the completed notebooks. Note, there is no one *correct* way in which to write the necessary functions 
+The **Solutions** folder contains the completed notebooks. Note, there is no one *correct* way in which to write the necessary functions 
 therefore the proposed solutions are only there to serve as guidance. 
 
 Disclaimer: the code has all been wrote and tested on Linux operating systems, where GPU access is available. Neither of the authors are professional 
