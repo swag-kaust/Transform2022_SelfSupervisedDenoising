@@ -37,7 +37,7 @@ The top level of the repository contains the skeleton tutorial notebooks that wi
 This level also contains the necessary files for setting up the conda environment (and submitting jobs for those working on the 
 KAUST IBEX cluster). As well as the standard git files - README, .gitignore, etc. 
 
-The **Tutorial_Solutions** folder contains the completed notebooks. Note, there is no one *correct* way in which to write the necessary functions 
+The **Solutions** folder contains the completed notebooks. Note, there is no one *correct* way in which to write the necessary functions 
 therefore the proposed solutions are only there to serve as guidance. 
 
 Disclaimer: the code has all been wrote and tested on Linux operating systems, where GPU access is available. Neither of the authors are professional 
@@ -56,6 +56,15 @@ This folder contains synthetically generated shot gathers modelled using the Hes
 of the Hess VTI model. The folder also contains a field data example originally downloaded from Madagascar of a post-stack
 seismic section that is often used benchmarking new random noise suppression algorithms.
 
+
+**Environment creation**
+
+We have made a conda environment file which contains all the necessary packages to run the tutorials. For ease of use,
+an installation script has been written to create the conda environment and  check the necessary packages were 
+correctly installed. The environment can be created with the following command (executed when in this folder):
+
+    ./install_tt2022ssd.sh
+    
 **Running in CoLab**
 
 All the tutorials can be run in Google CoLab, for those who do not have access to a local GPU. The CoLab notebooks can be 
@@ -74,13 +83,6 @@ opened using the following links:
 To run these you will need to download the data and necessary `*.py` files from this repository and point to them from the 
 notebooks.
 
-**Environment creation**
-
-We have made a conda environment file which contains all the necessary packages to run the tutorials. For ease of use,
-an installation script has been written to create the conda environment and  check the necessary packages were 
-correctly installed. The environment can be created with the following command (executed when in this folder):
-
-    ./install_tt2022ssd.sh
 
 **KAUST-IBEX Specific instructions**
 
