@@ -65,6 +65,10 @@ correctly installed. The environment can be created with the following command (
 
     ./install_tt2022ssd.sh
     
+The enviornment can then be activated by running the command:
+
+    conda activate tt2022ssd
+    
 **Running in CoLab**
 
 All the tutorials can be run in Google CoLab, for those who do not have access to a local GPU. The CoLab notebooks can be 
