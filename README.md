@@ -9,7 +9,7 @@ Authors:
  
 The tutorial was originally presented as a live-stream event on YouTube on April 27 2022 at 11 UTC. 
 
-YouTube Link: XXXX
+YouTube Link: https://www.youtube.com/watch?v=d9yv90-JCZ0
 
 Tutorial overview
 ---------------------------
@@ -46,6 +46,8 @@ software developers therefore, whilst we have spent significant time testing the
 Installation instructions
 ---------------------------
 
+As these procedures are based on deep-learning we encourage you to use a GPU if possible.
+
 **Data Download**
 
 The data utilised in this tutorial series can be downloaded from: https://exrcsdrive.kaust.edu.sa/exrcsdrive/index.php/s/vjjry6BZ3n3Ewei
@@ -69,24 +71,6 @@ The enviornment can then be activated by running the command:
 
     conda activate tt2022ssd
     
-**Running in CoLab**
-
-All the tutorials can be run in Google CoLab, for those who do not have access to a local GPU. The CoLab notebooks can be 
-opened using the following links:
-
- - Tutorial One: Random Noise Suppression
-    - skeletal: XXX
-    - full: XXX
- - Tutorial Two - Pseudo Random Noise Suppression
-    - skeletal: XXX
-    - full: XXX
- - Tutorial Three: Structured Noise Suppression
-    - skeletal: XXX
-    - full: XXX
-
-To run these you will need to download the data and necessary `*.py` files from this repository and point to them from the 
-notebooks.
-
 
 **KAUST-IBEX Specific instructions**
 
