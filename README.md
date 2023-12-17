@@ -50,9 +50,8 @@ As these procedures are based on deep-learning we encourage you to use a GPU if 
 
 **Data Download**
 
-The data utilised in this tutorial series can be downloaded from: https://exrcsdrive.kaust.edu.sa/exrcsdrive/index.php/s/vjjry6BZ3n3Ewei
-
-using the password: kaust
+The data utilised in this tutorial series can be downloaded from: 
+https://kaust-my.sharepoint.com/:u:/g/personal/birniece_kaust_edu_sa/ETavD6gzmutAsrVbfv84BVcBlS0tONM2CyGfMr6YjLrSvA?e=8gXGLD
 
 This folder contains synthetically generated shot gathers modelled using the Hess VTI model and a post-stack seismic section
 of the Hess VTI model. The folder also contains a field data example originally downloaded from Madagascar of a post-stack
